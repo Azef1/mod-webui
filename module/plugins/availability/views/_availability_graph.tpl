@@ -14,8 +14,8 @@
 %crit_level = elt.customs.get('_SLA_CRIT', 95.0)
 %warn_level = elt.customs.get('_SLA_WARN', 99.0)
 
+%if elt.__class__.my_type == 'host':
 <div class="availability-gage col-md-4" title="Down {{t_1}} seconds" data-duration={{t_1}} id="{{title.replace(" ", "_")}}" data-title="{{title}}" data-value="{{100-p_1}}" data-crit="{{crit_level}}" data-warn="{{warn_level}}"></div>
-
 <script>
   var $elem = $('#{{title.replace(" ", "_")}}')
   if ($elem.data('duration') == 0) {
@@ -24,3 +24,17 @@
     $elem.attr('title', "{{ elt.__class__.my_type }} has been down during " + eval('moment.duration(' + $elem.data('duration') + ', "seconds").humanize();') + " (accuracy {{100-p_4}}%)");
   }
 </script>
+
+%elif  elt.__class__.my_type == 'service':
+<div class="availability-gage col-md-4" title="CRITICAL {{t_2}} seconds" data-duration={{t_2}} id="{{title.replace(" ", "_")}}" data-title="{{title}}" data-value="{{10$
+<script>
+  var $elem = $('#{{title.replace(" ", "_")}}')
+  if ($elem.data('duration') == 0) {
+    $elem.attr('title', "{{ elt.__class__.my_type }} has been OK all the time (accuracy {{100-p_4}}%)")
+  } else {
+    $elem.attr('title', "{{ elt.__class__.my_type }} has been CRITICAL during " + $elem.data('duration') + " (accuracy {{100-p_4}}%)");
+  }
+</script>
+%else:
+<h1>Error the value of elt.__class__.my_type is not correct</h1>
+
